@@ -80,4 +80,49 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+    # inside the run() method
+        # add HLT variable with value of 1
+        HLT = 1
+        # add LDI variable with value of 2
+        LDI = 2
+        # add PRN variable with value of 3
+        PRN = 3
+
+        # read memory address stored in pc & store result in variable ir
+        ir = self.ram_read(self.pc)
+        # use ram_read() method and pass in pc+1 and store in variable operand_a
+        operand_a = self.ram_read(self.pc+1)
+        # use ram_read() method and pass in pc+2 and store in variable operand_b
+        operand_b = self.ram_read(self.pc+2)
+        
+        # set halted to False
+        halted = False
+
+        # while not halted
+        while not halted:
+            # set instruction to the program at the current pc count
+            instruction = self.ram_read(self.pc)
+
+            # if instruction == HLT 
+            if instruction == HLT:
+                # to exit the loop by changing halted to True
+                halted = True
+                # increment pc by 1 bite
+                self.pc += 1
+            # else if instruction == LDI
+            elif instruction == LDI:
+                # store the 8 value in a given register
+                self.reg[self.pc+1] = self.pc+2
+                # increment pc by 3 bites
+                self.pc += 3
+            # else if instruction == PRN
+            elif instruction == PRN:
+                # print the value in a register
+                reg_num = self.pc+1
+                print(self.reg[reg_num])
+                # increment pc by 2 bites
+                self.pc += 2
+            # otherwise
+            else:
+                # print error message
+                print(f"No instructrion found at index {self.pc}")
