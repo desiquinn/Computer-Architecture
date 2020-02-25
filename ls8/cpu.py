@@ -7,7 +7,14 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+     # inside def __init__(self): of the CPU class
+        # add ram property with empty list
+        self.ram = []
+        # add reg property with a list of 8 zeros (reg = [0] * 8)
+        self.reg = [0] * 8
+        # add properties for internal registers
+        # pc - program counter, address of the current executing instruction
+        self.pc = 0
 
     def load(self):
         """Load a program into memory."""
@@ -30,6 +37,17 @@ class CPU:
             self.ram[address] = instruction
             address += 1
 
+    # add ram_read() method - takes in address to read from mar
+    def ram_read(self, mar):
+        # create a variable called value and assign it to the value located in the RAM at specific address passed in
+        value = self.ram[mar]
+        # return value from RAM
+        return value
+
+    # add ram_write() method - takes in value to write from mdr, and address to write too from mar
+    def ram_write(self, mdr, mar):
+        # writes the value to the ram at the specific address passed in
+        self.ram[mar] = mdr
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
