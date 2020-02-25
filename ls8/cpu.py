@@ -9,7 +9,7 @@ class CPU:
         """Construct a new CPU."""
      # inside def __init__(self): of the CPU class
         # add ram property with empty list
-        self.ram = []
+        self.ram = [0] * 8
         # add reg property with a list of 8 zeros (reg = [0] * 8)
         self.reg = [0] * 8
         # add properties for internal registers
