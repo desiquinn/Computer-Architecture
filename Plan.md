@@ -55,3 +55,15 @@
                     # convert the binary number to an interger
                     # save it to the ram at the current address
                     # increment address
+
+    # Inside the alu() method
+        # else if op == "MUL"
+            # get value from reg A and get value from reg B, mulitply and assign to reg A
+    
+    # Inside run() method
+        # add MUL to the instructions list with machine code 0b10100010
+
+        # add to the while loop
+            # if the ir is equal to the MUL
+                # invoke alu(op,reg_a, reg_b)
+                # increment pc by 3

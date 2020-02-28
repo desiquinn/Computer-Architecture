@@ -64,7 +64,10 @@ class CPU:
 
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
-        #elif op == "SUB": etc
+        # else if op == "MUL"
+        elif op == "MUL":
+            # get value from reg A and get value from reg B, mulitply and assign to reg A
+            self.reg[reg_a] *= self.reg[reg_b]
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -97,7 +100,8 @@ class CPU:
         LDI = 0b10000010
         # add PRN definition
         PRN = 0b01000111
-
+        # add MUL to the instructions list with machine code 0b10100010
+        MUL = 0b10100010
         
         # set halted to False
         halted = False
@@ -130,6 +134,12 @@ class CPU:
                 print(self.reg[reg_num])
                 # increment pc by 2 bites
                 self.pc += 2
+            # if the ir is equal to the MUL
+            elif ir == MUL:
+                # invoke alu(op,reg_a, reg_b)
+                self.alu("MUL", operand_a, operand_b)
+                # increment pc by 3
+                self.pc += 3
             # otherwise
             else:
                 # print error message

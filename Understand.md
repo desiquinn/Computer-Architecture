@@ -125,5 +125,25 @@ We need to ignore blank lines
 slice out everything after #
 convert the binary string to an interger using int(ob#, base 2)
 
+* Implementing the multiply instruction
 
+the ls8 need to be able to run mult.ls8 and get an output of 72
+reading the file is already done
+LDI is already done
+PRN is already done
+HLT is already done
+
+Just need to handle:
+10100010 # MUL R0,R1
+00000000
+00000001
+
+This shoud be done in the ALU
+code also need to call alu() with appropriate arguments
+
+about MUL: 
+MUL  10100010 00000aaa 00000bbb
+MUL  Machine  RegA     RegB
+has 2 operands (increment 3)
+since b = 1 this is an ALU operation
 
