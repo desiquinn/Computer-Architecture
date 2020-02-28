@@ -38,3 +38,10 @@ JEQ - jumps if the regA and regB are equal
 # pseudo code
     # if the equal flag is true (00000001)
         # jump to the address stored in the given register
+
+JNE - jumps if the reqA are NOT equal
+- sets pc directly
+
+# pseudo code
+    # If E flag is clear (00000000 OR 00000010 OR 00000100)
+        # jump to the address stored in the given register.

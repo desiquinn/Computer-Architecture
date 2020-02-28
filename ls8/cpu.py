@@ -193,7 +193,11 @@ class CPU:
             self.pc = self.reg[reg_num]
 
     def handle_jne(self, operand_a, operand_b):
-        pass
+        # If E flag is clear (00000010 OR 00000100)
+        if self.fl == 0b00000010 | self.fl == 0b00000100:
+        # jump to the address stored in the given register.
+            reg_num = operand_a
+            self.pc = self.reg[reg_num]
 
     '''
     STRETCH handlers
