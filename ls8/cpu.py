@@ -77,14 +77,14 @@ class CPU:
             # get value from reg A and get value from reg B, mulitply and assign to reg A
             self.reg[reg_a] *= self.reg[reg_b]
         elif op == "CMP":
-            if reg_a == reg_b:
+            if self.reg[reg_a] == self.reg[reg_b]:
                 self.fl = 0b00000001
-            elif reg_a < reg_b:
-                self.fl = 0b00000100
-            elif reg_a > reg_b:
-                self.fl = 0b00000010
-            else:
-                self.fl = 0b00000000
+            # elif reg_a < reg_b:
+            #     self.fl = 0b00000100
+            # elif reg_a > reg_b:
+            #     self.fl = 0b00000010
+            # else:
+            #     self.fl = 0b00000000
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -177,6 +177,7 @@ class CPU:
     SPRINT handlers
     '''
     def handle_cmp(self, operand_a, operand_b):
+        # print ("comparing")
         self.alu("CMP", operand_a, operand_b)
         self.pc += 3
 
@@ -187,17 +188,25 @@ class CPU:
 
     def handle_jeq(self, operand_a, operand_b):
         # if the equal flag is true (00000001)
+        # print(f" inside jeq but outside if statement {operand_a}")
+        # print(f"in jeq {self.fl}")
         if self.fl == 0b00000001:
             # jump to the address stored in the given register
             reg_num = operand_a
+            # print(reg_num)
             self.pc = self.reg[reg_num]
+        else:
+            self.pc += 2
 
     def handle_jne(self, operand_a, operand_b):
         # If E flag is clear (00000010 OR 00000100)
-        if self.fl == 0b00000010 | self.fl == 0b00000100:
+        if self.fl != 0b00000001 :
         # jump to the address stored in the given register.
+            # print(f"in JNE")
             reg_num = operand_a
             self.pc = self.reg[reg_num]
+        else: 
+            self.pc += 2
 
     '''
     STRETCH handlers
@@ -257,11 +266,13 @@ class CPU:
         while not self.halted:
             # read memory address stored in pc & store result in variable ir
             ir = self.ram_read(self.pc)
+            # print(f"in loop {ir}")
             # use ram_read() method and pass in pc+1 and store in variable operand_a
             operand_a = self.ram_read(self.pc+1)
+            # print(operand_a)
             # use ram_read() method and pass in pc+2 and store in variable operand_b
             operand_b = self.ram_read(self.pc+2)
-
+            # print(operand_b)
             # instead of the casscading if statments call the branchtable with the specific op (set to ir)
             self.branchtable[ir](operand_a, operand_b)
 
