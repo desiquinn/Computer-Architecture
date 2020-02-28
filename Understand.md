@@ -98,3 +98,32 @@ THE PROGRAM IS ALREADY HARD CODED INTO SOURCE FILE (cpu.py)
         - how?
 
 
+Day 2 To Do ************
+
+Day 2: Add the ability to load files dynamically, get mult.ls8 running
+ Un-hardcode the machine code
+ Implement the load() function to load an .ls8 file given the filename passed in as an argument
+ Implement a Multiply instruction (run mult8.ls8)
+
+ Use the command line like "python3 ls8.py examples/mult.ls8" in order to run specific files from examples using our ls8
+
+Use the following to see how you are running these files:
+
+import sys
+
+print(sys.argv)
+
+You can also use this to run the specific file dynamically in your code:
+
+sys.argv[0] == "ls8.py"
+sys.argv[1] == "examples/mult.ls8"
+
+Also use error handling to ensure you are only getting back what you expect
+
+This will all be done in load() and using with open ()
+We need to ignore blank lines 
+slice out everything after #
+convert the binary string to an interger using int(ob#, base 2)
+
+
+

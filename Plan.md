@@ -40,3 +40,18 @@
                 # increment pc by 2 bites
             # otherwise
                 # print error message
+
+# Day 2 MVP
+   
+    # Inside the load() method
+        # if there is no sys.argv[1]
+            # print an error message
+        # else Open a file dynamically from examples directory (using sys.argv[1])
+            # for every line in this file
+                # slice out everything that is after a ', #'
+                # if it is a blank line 
+                    # ignore it (continue)
+                # else 
+                    # convert the binary number to an interger
+                    # save it to the ram at the current address
+                    # increment address
