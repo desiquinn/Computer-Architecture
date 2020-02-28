@@ -67,3 +67,26 @@
             # if the ir is equal to the MUL
                 # invoke alu(op,reg_a, reg_b)
                 # increment pc by 3
+    
+    # inside __init__
+        # add a branch table set to an empty dictionary
+        # add properties that call each instruction 
+        # and it's helper function (HLT, LDI, PRN) for
+        # MUL we will call the alu still
+
+    # inside the cpu class
+        # add a helper function for HLT
+            # include the logic from the is statement in run()
+        # add a helper function for LDI
+            # include the logic from the is statement in run()
+        # add a helper function for PRN
+            # include the logic from the is statement in run()
+
+    # inside the run class
+        # instead of the if statments call the branchtable with the specific op (set to ir)
+        
+
+
+
+    
+        

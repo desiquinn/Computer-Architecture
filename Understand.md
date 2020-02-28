@@ -147,3 +147,41 @@ MUL  Machine  RegA     RegB
 has 2 operands (increment 3)
 since b = 1 this is an ALU operation
 
+* Step 8 beautifying run loop
+
+branch table / dispatch table - a dictionary or list that you can index by opcode value
+ - fetch instruction value from RAM
+ - use the value to look up the handler function in the branch table
+ - run the handler function
+
+OP1 = 0b10101010
+OP2 = 0b11110000
+
+example: 
+class Foo: # this will be the cpu class
+
+    def __init__(self):
+        # Set up the branch table
+        # add these to the __init__ of the cpu class
+        self.branchtable = {} 
+        self.branchtable[OP1] = self.handle_op1
+        self.branchtable[OP2] = self.handle_op2
+
+    # add these helper functions as methods on the cpu class
+    def handle_op1(self, a):
+        print("op 1: " + a)
+
+    def handle_op2(self, a):
+        print("op 2: " + a)
+
+    def run(self):
+        # Example calls into the branch table
+        # this is all that should be in run afterwards
+        ir = OP1
+        self.branchtable[ir]("foo")
+
+        ir = OP2
+        self.branchtable[ir]("bar")
+
+c = Foo()
+c.run()

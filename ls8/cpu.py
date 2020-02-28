@@ -15,6 +15,11 @@ class CPU:
         # add properties for internal registers
         # pc - program counter, address of the current executing instruction
         self.pc = 0
+        # add a branch table set to an empty dictionary
+        self.branchtable = {}
+        # add properties that call each instruction and it's helper function (HLT, LDI, PRN) for...
+        # MUL we will call the alu still
+        self.halted = True
 
     def load(self):
         """Load a program into memory."""
@@ -90,6 +95,30 @@ class CPU:
             print(" %02X" % self.reg[i], end='')
 
         print()
+    
+    # inside the cpu class
+    # add a helper function for HLT
+    def handle_hlt(self, operand_a, operand_b):
+        # include the logic from the is statement in run()
+        self.halted = True
+        self.pc += 1
+      
+    # add a helper function for LDI
+    def handle_ldi(self, operand_a, operand_b):
+        # include the logic from the is statement in run()
+        self.reg[operand_a] = operand_b
+        self.pc += 3
+     
+    # add a helper function for PRN
+    def handle_prn(self, operand_a, operand_b):
+        # include the logic from the is statement in run()
+        reg_num = operand_a
+        print(self.reg[reg_num])
+        self.pc += 2
+    
+    def handle_mul(self, operand_a, operand_b):
+        self.alu("MUL", operand_a, operand_b)
+        self.pc += 3
 
     def run(self):
         """Run the CPU."""
@@ -102,12 +131,19 @@ class CPU:
         PRN = 0b01000111
         # add MUL to the instructions list with machine code 0b10100010
         MUL = 0b10100010
+
+        # add each instruction and it's helper function (HLT, LDI, PRN) to the branch table
+        # MUL we will call the alu still
+        self.branchtable[HLT] = self.handle_hlt
+        self.branchtable[LDI] = self.handle_ldi
+        self.branchtable[PRN] = self.handle_prn
+        self.branchtable[MUL] = self.handle_mul
         
         # set halted to False
-        halted = False
+        self.halted = False
 
         # while not halted
-        while not halted:
+        while not self.halted:
             # read memory address stored in pc & store result in variable ir
             ir = self.ram_read(self.pc)
             # use ram_read() method and pass in pc+1 and store in variable operand_a
@@ -115,33 +151,36 @@ class CPU:
             # use ram_read() method and pass in pc+2 and store in variable operand_b
             operand_b = self.ram_read(self.pc+2)
 
+            # instead of the casscading if statments call the branchtable with the specific op (set to ir)
+            self.branchtable[ir](operand_a, operand_b)
+
             # if ir == HLT 
-            if ir == HLT:
-                # to exit the loop by changing halted to True
-                halted = True
-                # increment pc by 1 bite
-                self.pc += 1
-            # else if ir == LDI
-            elif ir == LDI:
-                # store the 8 value in a given register
-                self.reg[operand_a] = operand_b
-                # increment pc by 3 bites
-                self.pc += 3
-            # else if ir == PRN
-            elif ir == PRN:
-                # print the value in a register
-                reg_num = operand_a
-                print(self.reg[reg_num])
-                # increment pc by 2 bites
-                self.pc += 2
-            # if the ir is equal to the MUL
-            elif ir == MUL:
-                # invoke alu(op,reg_a, reg_b)
-                self.alu("MUL", operand_a, operand_b)
-                # increment pc by 3
-                self.pc += 3
+            # if ir == HLT:
+            #     # to exit the loop by changing halted to True
+            #     halted = True
+            #     # increment pc by 1 bite
+            #     self.pc += 1
+            # # else if ir == LDI
+            # elif ir == LDI:
+            #     # store the 8 value in a given register
+            #     self.reg[operand_a] = operand_b
+            #     # increment pc by 3 bites
+            #     self.pc += 3
+            # # else if ir == PRN
+            # elif ir == PRN:
+            #     # print the value in a register
+            #     reg_num = operand_a
+            #     print(self.reg[reg_num])
+            #     # increment pc by 2 bites
+            #     self.pc += 2
+            # # if the ir is equal to the MUL
+            # elif ir == MUL:
+            #     # invoke alu(op,reg_a, reg_b)
+            #     self.alu("MUL", operand_a, operand_b)
+            #     # increment pc by 3
+            #     self.pc += 3
             # otherwise
-            else:
-                # print error message
-                print(f"No instructrion found at index {self.pc}")
-                halted = True
+            # else:
+            #     # print error message
+            #     print(f"No instructrion found at index {self.pc}")
+            #     halted = True
