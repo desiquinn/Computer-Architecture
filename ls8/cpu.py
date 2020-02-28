@@ -143,6 +143,26 @@ class CPU:
         # increment pc
         self.pc += 2
 
+    def handle_call(self, operand_a, operand_b):
+        # push return address onto stack
+        ret_add = self.pc + 2 # next instruction in the stack
+        # decrement sp
+        self.reg[self.sp] -= 1
+        self.ram[self.reg[self.sp]] = ret_add
+        # set the pc to the value in the register
+        reg_num = operand_a
+        self.pc = self.reg[reg_num]
+
+    def handle_ret(self, operand_a, operand_b):
+        # pop the return address off the stack
+        # store it in the pc
+        self.pc = self.ram[self.reg[self.sp]]
+        self.reg[self.sp] += 1
+
+    def handle_add(self, operand_a, operand_b):
+        self.alu("ADD", operand_a, operand_b)
+        self.pc += 3
+
 
     def run(self):
         """Run the CPU."""
@@ -158,6 +178,10 @@ class CPU:
         # add push and pop definitions
         PUSH = 0b01000101
         POP = 0b01000110
+        # add call and ret definitions
+        CALL = 0b01010000
+        RET = 0b00010001
+        ADD = 0b10100000
 
         # add each instruction and it's helper function (HLT, LDI, PRN) to the branch table
         # MUL we will call the alu still
@@ -167,6 +191,9 @@ class CPU:
         self.branchtable[MUL] = self.handle_mul
         self.branchtable[PUSH] = self.handle_push
         self.branchtable[POP] = self.handle_pop
+        self.branchtable[CALL] = self.handle_call
+        self.branchtable[RET] = self.handle_ret
+        self.branchtable[ADD] = self.handle_add
         
         # set halted to False
         self.halted = False
