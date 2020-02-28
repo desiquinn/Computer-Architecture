@@ -186,7 +186,11 @@ class CPU:
         self.pc = self.reg[reg_num]
 
     def handle_jeq(self, operand_a, operand_b):
-        pass
+        # if the equal flag is true (00000001)
+        if self.fl == 0b00000001:
+            # jump to the address stored in the given register
+            reg_num = operand_a
+            self.pc = self.reg[reg_num]
 
     def handle_jne(self, operand_a, operand_b):
         pass

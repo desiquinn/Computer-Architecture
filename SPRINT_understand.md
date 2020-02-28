@@ -31,3 +31,10 @@ JMP instruction - jumps to the address stored in the given register
     # set the pc to the address stored at the given register
 
 * implementing JEQ and JNE
+
+JEQ - jumps if the regA and regB are equal
+-sets pc directly
+
+# pseudo code
+    # if the equal flag is true (00000001)
+        # jump to the address stored in the given register
