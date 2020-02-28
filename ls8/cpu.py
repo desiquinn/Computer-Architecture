@@ -181,7 +181,9 @@ class CPU:
         self.pc += 3
 
     def handle_jmp(self, operand_a, operand_b):
-        pass
+        # set the pc to the address stored at the given register
+        reg_num = operand_a
+        self.pc = self.reg[reg_num]
 
     def handle_jeq(self, operand_a, operand_b):
         pass

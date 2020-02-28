@@ -25,4 +25,9 @@ CMP is handled by the ALU!
 
 * implementing JMP
 
+JMP instruction - jumps to the address stored in the given register
+
+# pseudo code
+    # set the pc to the address stored at the given register
+
 * implementing JEQ and JNE
