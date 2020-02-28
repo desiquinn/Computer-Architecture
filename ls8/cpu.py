@@ -22,6 +22,7 @@ class CPU:
         self.halted = True
         self.sp = 7
         self.reg[self.sp] = 0xF4
+        self.fl = 0b00000000
 
     def load(self):
         """Load a program into memory."""
@@ -75,6 +76,15 @@ class CPU:
         elif op == "MUL":
             # get value from reg A and get value from reg B, mulitply and assign to reg A
             self.reg[reg_a] *= self.reg[reg_b]
+        elif op == "CMP":
+            if reg_a == reg_b:
+                self.fl = 0b00000001
+            elif reg_a < reg_b:
+                self.fl = 0b00000100
+            elif reg_a > reg_b:
+                self.fl = 0b00000010
+            else:
+                self.fl = 0b00000000
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -167,7 +177,8 @@ class CPU:
     SPRINT handlers
     '''
     def handle_cmp(self, operand_a, operand_b):
-        pass
+        self.alu("CMP", operand_a, operand_b)
+        self.pc += 3
 
     def handle_jmp(self, operand_a, operand_b):
         pass
