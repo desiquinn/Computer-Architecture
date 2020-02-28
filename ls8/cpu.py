@@ -20,6 +20,8 @@ class CPU:
         # add properties that call each instruction and it's helper function (HLT, LDI, PRN) for...
         # MUL we will call the alu still
         self.halted = True
+        self.sp = 7
+        self.reg[self.sp] = 0xF4
 
     def load(self):
         """Load a program into memory."""
@@ -120,6 +122,28 @@ class CPU:
         self.alu("MUL", operand_a, operand_b)
         self.pc += 3
 
+    def handle_push(self, operand_a, operand_b):
+        # decrement stack pointer
+        self.reg[self.sp] -= 1
+        # copy the value into the register at the sp
+        reg_num = operand_a
+        reg_val = self.reg[reg_num]
+        self.ram[self.reg[self.sp]] = reg_val
+        # increment pc
+        self.pc += 2
+
+    def handle_pop(self, operand_a, operand_b):
+        # grab value at the top of the stack
+        val = self.ram[self.reg[self.sp]]
+        # copy the value from the stack into the given register
+        reg_num = operand_a
+        self.reg[reg_num] = val
+        # increment sp
+        self.reg[self.sp] += 1
+        # increment pc
+        self.pc += 2
+
+
     def run(self):
         """Run the CPU."""
     # inside the run() method
@@ -131,6 +155,9 @@ class CPU:
         PRN = 0b01000111
         # add MUL to the instructions list with machine code 0b10100010
         MUL = 0b10100010
+        # add push and pop definitions
+        PUSH = 0b01000101
+        POP = 0b01000110
 
         # add each instruction and it's helper function (HLT, LDI, PRN) to the branch table
         # MUL we will call the alu still
@@ -138,6 +165,8 @@ class CPU:
         self.branchtable[LDI] = self.handle_ldi
         self.branchtable[PRN] = self.handle_prn
         self.branchtable[MUL] = self.handle_mul
+        self.branchtable[PUSH] = self.handle_push
+        self.branchtable[POP] = self.handle_pop
         
         # set halted to False
         self.halted = False
